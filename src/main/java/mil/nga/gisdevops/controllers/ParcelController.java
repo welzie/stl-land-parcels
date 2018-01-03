@@ -1,4 +1,4 @@
-package mil.nga.gisdevops;
+package mil.nga.gisdevops.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,15 +10,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 
 @Controller
-public class ListController {
+public class ParcelController {
 
+    /* Go to url localhost:8080/alive to see output */
     @RequestMapping(value = "/alive")
     @ResponseBody
     public String alive() {
         return "yes";
     }
 
-    @RequestMapping(value = "/")
+    /* Go to url localhost:8080/parcels to see output */
+    @RequestMapping(value = "/parcels")
     public String index() {
         return "index";
     }
