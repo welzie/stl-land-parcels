@@ -1,0 +1,1 @@
+ALTER TABLE parcel ADD COLUMN plot_name VARCHAR(255);

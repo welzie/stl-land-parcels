@@ -7,12 +7,16 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath(group: 'org.postgresql', name: 'postgresql', version: '42.1.4')
+        classpath(group: 'org.flywaydb', name: 'flyway-gradle-plugin', version: '5.0.4')
 	}
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'org.flywaydb.flyway'
+
 
 jar {
 	baseName = 'stl-land-parcels'
@@ -30,12 +34,42 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-web')
+    compile(group: 'org.postgresql', name: 'postgresql', version: '42.1.4')
 	runtime('org.springframework.boot:spring-boot-devtools')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-	compile(group: 'postgresql', name: 'postgresql', version: '9.0-801.jdbc4')
 
 }
 
 bootRun {
 	addResources = true
 }
+
+task migrateDev(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+    driver = "org.postgresql.Driver"
+    url = 'jdbc:postgresql://localhost:5432/devdb'
+    user = 'postgres'
+    password = ''
+}
+
+task migrateTest(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+    driver = "org.postgresql.Driver"
+    url = 'jdbc:postgresql://localhost:5432/devdb'
+    user = 'postgres'
+    password = ''
+}
+
+task cleanDev(type: org.flywaydb.gradle.task.FlywayCleanTask) {
+    driver = "org.postgresql.Driver"
+    url = 'jdbc:postgresql://localhost:5432/devdb'
+    user = 'postgres'
+    password = ''
+}
+
+task cleanTest(type: org.flywaydb.gradle.task.FlywayCleanTask) {
+    driver = "org.postgresql.Driver"
+    url = 'jdbc:postgresql://localhost:5432/devdb'
+    user = 'postgres'
+    password = ''
+}
+migrateTest.dependsOn cleanTest
+migrateDev.dependsOn cleanDev
